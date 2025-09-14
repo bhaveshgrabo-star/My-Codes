@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buggati Features</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #0d0d0d;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    h1, h2 {
+      font-weight: 700;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.3em;
+      text-transform: uppercase;
+      color: #ff5f1f;
+      text-align: center;
+      text-shadow: 2px 2px 12px #ff5f1faa;
+      animation: fadeSlideIn 1s ease forwards;
+    }
+    header {
+      max-width: 900px;
+      margin-bottom: 30px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeSlideIn 1.3s ease forwards;
+      animation-delay: 0.2s;
+    }
+    img.hero-image {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 15px;
+      box-shadow: 0 8px 40px #ff5f1faa;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.4s;
+    }
+    img.hero-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 50px #ff5f1fdd;
+    }
+    section.features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeSlideIn 1.7s ease forwards;
+      animation-delay: 0.6s;
+    }
+    .feature-card {
+      background: #1c1c1c;
+      border-radius: 20px;
+      padding: 20px 25px 15px 25px;
+      box-shadow: 0 6px 15px #ff5f1f44;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 16px 35px #ff5f1faa;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .feature-icon {
+      font-size: 3.8rem;
+      color: #ff5f1f;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .feature-title {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #ffa34d;
+      flex-grow: 1;
+      transition: color 0.3s ease;
+    }
+    .feature-card:hover .feature-title {
+      color: #ffd27f;
+    }
+    .toggle-arrow {
+      font-size: 1.8rem;
+      color: #ffa34d;
+      transition: transform 0.3s ease;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .toggle-arrow.open {
+      transform: rotate(90deg);
+      color: #ffd27f;
+    }
+    .feature-desc {
+      margin-top: 15px;
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+    .feature-details {
+      max-height: 0;
+      overflow: hidden;
+      color: #ddd;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-top: 10px;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding-left: 10px;
+      border-left: 3px solid #ff5f1f;
+      user-select: text;
+    }
+    .feature-details.open {
+      max-height: 500px; /* enough to show full content */
+      padding-top: 10px;
+      padding-bottom: 15px;
+    }
+    footer {
+      font-size: 0.9rem;
+      color: #666666aa;
+      margin-top: auto;
+      padding: 15px;
+      text-align: center;
+      width: 100%;
+      max-width: 900px;
+      border-top: 1px solid #333;
+      user-select: none;
+    }
+    #exploreBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff5f1f, #ffa34d);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: 700;
+      color: #22223b;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff7f3faa;
+      user-select: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: pulse 3s infinite ease-in-out;
+      z-index: 1000;
+    }
+    #exploreBtn:hover {
+      animation-play-state: paused;
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 0 18px #ff7f3fff;
+      animation: shake 0.8s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(5px) rotate(4deg); }
+      50% { transform: translateX(-5px) rotate(-4deg); }
+      75% { transform: translateX(5px) rotate(4deg); }
+      100% { transform: translateX(0) rotate(0deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px #ff7f3faa; }
+      50% { box-shadow: 0 0 20px #ff7f3fff; }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Buggati Features</h1>
+    <img class="hero-image" src="https://media.wired.com/photos/5927284ff3e2356fd800b9b4/master/pass/03_CHIRON_34-front_WEB.jpg" alt="Bugatti Car Image" />
+    <p>Experience unparalleled power, luxury, and cutting-edge technology with Bugatti's masterpieces.</p>
+  </header>
+
+  <section class="features">
+    <div class="feature-card" tabindex="0">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Engine Power">⚡</div>
+        <h2 class="feature-title">Engine Power</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        Crafted with an 8.0L quad-turbocharged W16 engine delivering over 1,500 horsepower, ensuring mind-blowing speed.
+      </p>
+      <div class="feature-details">
+        The engine is a masterpiece combining four turbochargers and a complex cooling system that allows unprecedented power and reliability.
+        Its precise engineering pushes mechanical limits for performance enthusiasts.
+      </div>
+    </div>
+
+    <div class="feature-card" tabindex="0">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Top Speed">🚀</div>
+        <h2 class="feature-title">Top Speed</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        Achieves a top speed of over 420 km/h (261 mph), making it one of the fastest production cars on the planet.
+      </p>
+      <div class="feature-details">
+        Advanced aerodynamics and lightweight carbon fiber construction allow the car to maintain stability at extreme speeds.
+        The electronic speed limiter only caps the car to ensure safety without sacrificing thrill.
+      </div>
+    </div>
+
+    <div class="feature-card" tabindex="0">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Design Excellence">🎨</div>
+        <h2 class="feature-title">Design Excellence</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        Aerodynamically engineered with sleek lines and carbon fiber bodywork that combines beauty and performance.
+      </p>
+      <div class="feature-details">
+        Every design detail is optimized for airflow to reduce drag and increase downforce.
+        Materials used for the chassis and body are state-of-the-art composites that ensure strength and reduce weight.
+      </div>
+    </div>
+
+    <div class="feature-card" tabindex="0" aria-label="Exhaust Sound" title="Click to hear exhaust sound">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Exhaust Sound">🔊</div>
+        <h2 class="feature-title">Exhaust Sound</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        Distinctive sporty exhaust note tuned for an exhilarating auditory experience that thrills every enthusiast.
+      </p>
+      <div class="feature-details">
+        The exhaust system is meticulously tuned acoustically for a rich, lively roar.
+        It changes tone dynamically based on driving mode and throttle position for an immersive experience.
+      </div>
+    </div>
+
+    <div class="feature-card" tabindex="0">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Advanced Technology">🛠️</div>
+        <h2 class="feature-title">Advanced Technology</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        State-of-the-art aerodynamics, adaptive suspension, and cutting-edge electronics for unmatched driving precision.
+      </p>
+      <div class="feature-details">
+        The car is equipped with active aerodynamic wings, adaptive dampers that adjust per road conditions,
+        and sophisticated traction control to ensure safety and performance in all scenarios.
+      </div>
+    </div>
+
+    <div class="feature-card" tabindex="0">
+      <div class="card-header">
+        <div class="feature-icon" aria-label="Luxury Interiors">💎</div>
+        <h2 class="feature-title">Luxury Interiors</h2>
+        <div class="toggle-arrow" aria-hidden="true">▶</div>
+      </div>
+      <p class="feature-desc">
+        Exquisitely handcrafted interiors with premium leather, Alcantara, and bespoke detailing for ultimate comfort.
+      </p>
+      <div class="feature-details">
+        Each car’s interior layout is hand-finished by master craftsmen with customizable options,
+        including bespoke embroidery, advanced infotainment, and sound system tailored to the owner's tastes.
+      </div>
+    </div>
+  </section>
+
+  <button id="exploreBtn" aria-label="Explore More Features" title="Explore More Features">Explore More</button>
+
+  <audio id="exhaustAudio" src="https://actions.google.com/sounds/v1/vehicles/car_engine_accelerate.ogg" preload="auto"></audio>
+
+  <footer>
+    &copy; 2025 Buggati Features. All rights reserved.
+  </footer>
+
+  <script>
+    // Play exhaust audio on click of the exhaust sound card
+    document.addEventListener("DOMContentLoaded", function () {
+      const exhaustCard = document.querySelector('.feature-card[aria-label="Exhaust Sound"]');
+      const exhaustAudio = document.getElementById('exhaustAudio');
+
+      exhaustCard.addEventListener('click', function () {
+        exhaustAudio.currentTime = 0;
+        exhaustAudio.play();
+      });
+    });
+
+    // Toggle dropdown details on any feature card header click
+    document.querySelectorAll('.card-header').forEach(header => {
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', () => {
+        const card = header.parentElement;
+        const details = card.querySelector('.feature-details');
+        const arrow = header.querySelector('.toggle-arrow');
+
+        if (details.classList.contains('open')) {
+          details.classList.remove('open');
+          arrow.classList.remove('open');
+        } else {
+          details.classList.add('open');
+          arrow.classList.add('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
